@@ -629,7 +629,7 @@ function MediumEditor(elements, options) {
             this.isActive = false;
 
             if (this.toolbar !== undefined) {
-                this.toolbar.deactivate();
+                this.toolbar.destroy();
                 delete this.toolbar;
             }
 
@@ -653,7 +653,11 @@ function MediumEditor(elements, options) {
             this.elements = [];
 
             this.commands.forEach(function (extension) {
+                if (typeof extension.destroy === 'function') {
+                    extension.destroy();
+                }
                 if (typeof extension.deactivate === 'function') {
+                    Util.warn('Extension .deactivate() function has been deprecated. Use .destroy() instead. This will be removed in version 5.0.0');
                     extension.deactivate();
                 }
             }, this);
